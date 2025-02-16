@@ -1,10 +1,10 @@
 import Web3Provider from "../components/Web3Provider";
-import Game from "../components/Game";
+import Game from "../components/Game/Game";
 import UI from "../components/UI";
 
 const Home = () => {
   return (
-    <Web3Provider>
+    <Web3Provider >
       <Game />
       <UI />
     </Web3Provider>

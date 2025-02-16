@@ -2,6 +2,7 @@
   "dependencies": {
     "@react-three/drei": "^9.121.5",
     "@react-three/fiber": "^8.17.14",
+    "@tailwindcss/cli": "^4.0.6",
     "@twa-dev/sdk": "^8.0.2",
     "@types/three": "^0.173.0",
     "ethers": "^6.13.5",
@@ -12,7 +13,8 @@
     "web3": "^4.16.0"
   },
   "devDependencies": {
-    "@types/react": "^19.0.8"
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3"
   },
   "scripts": {
     "dev": "next dev",
