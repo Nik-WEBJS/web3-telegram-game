@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-const SPEED = 0.05;
+const SPEED = 0.1;
 
 const ModelController = ({
   modelRef,
@@ -23,6 +23,7 @@ const ModelController = ({
     switch (event.code) {
       case "KeyW":
         movement.current.forward = true;
+
         break;
       case "KeyS":
         movement.current.backward = true;
@@ -66,19 +67,21 @@ const ModelController = ({
     if (modelRef.current) {
       const direction = new THREE.Vector3();
 
-      if (movement.current.forward) direction.z -= SPEED;
-      if (movement.current.backward) direction.z += SPEED;
-      if (movement.current.left) direction.x -= SPEED;
-      if (movement.current.right) direction.x += SPEED;
+      if (movement.current.forward) direction.z -= 1;
+      if (movement.current.backward) direction.z += 1;
+      if (movement.current.left) direction.x -= 1;
+      if (movement.current.right) direction.x += 1;
 
       if (direction.lengthSq() > 0) {
+        // Проверка, есть ли движение
         direction.normalize().multiplyScalar(SPEED);
         modelRef.current.position.add(direction);
 
         // Поворот модели в сторону движения
-        const angle = Math.atan2(-direction.x, -direction.z);
+        const angle = Math.atan2(direction.x, direction.z);
         modelRef.current.rotation.y = angle;
       }
+
       onMove(direction);
     }
   });

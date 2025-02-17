@@ -33,17 +33,7 @@ const Background = ({
   }, []);
 
   useFrame(() => {
-    if (!movement || !playerPos || !texture) return;
-
-    console.log("movement:", movement);
-    console.log("playerPos:", playerPos);
-    console.log("tilesRef:", tilesRef.current);
-
-    // Безопасное обновление offset текстуры
-    texture.offset.x -= movement.x * 0.05 || 0;
-    texture.offset.y -= movement.z * 0.05 || 0;
-
-    if (!tilesRef.current.length) return;
+    if (!playerPos || !tilesRef.current.length) return;
 
     const offsetX = Math.floor(playerPos.x / TILE_SIZE) * TILE_SIZE;
     const offsetZ = Math.floor(playerPos.z / TILE_SIZE) * TILE_SIZE;
