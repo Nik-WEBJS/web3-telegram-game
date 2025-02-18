@@ -9,6 +9,7 @@ declare global {
 
 const UI = () => {
   const [balance, setBalance] = useState("0");
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     const updateBalance = async () => {
@@ -36,7 +37,9 @@ const UI = () => {
   return (
     <div style={{ position: "absolute", top: 0, right: 0, padding: 10 }}>
       <p>Баланс: {balance} ETH</p>
-      {!window.ethereum && <button onClick={() => alert("Войти в игру")}>Войти</button>}
+      {isClient && !window.ethereum && (
+        <button onClick={() => alert("Войти в игру")}>Войти</button>
+      )}
     </div>
   );
 };
