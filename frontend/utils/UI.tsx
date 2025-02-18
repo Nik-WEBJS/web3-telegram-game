@@ -12,6 +12,8 @@ const UI = () => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+
     const updateBalance = async () => {
       if (!window.ethereum) return;
       try {
