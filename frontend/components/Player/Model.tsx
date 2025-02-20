@@ -3,7 +3,7 @@ import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 const Model = forwardRef<THREE.Object3D, any>((props, ref) => {
-  const { scene } = useGLTF("/models/body/scene.gltf");
+  const { scene } = useGLTF("/models/swat/scene.gltf");
 
   return <primitive object={scene} ref={ref} {...props} />;
 });
