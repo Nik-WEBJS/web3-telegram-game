@@ -4,22 +4,22 @@ import * as THREE from "three";
 import { useMovement } from "../../hooks/useMovement";
 import BulletsRenderer from "../Bullet/BulletsRenderer";
 import { useShooting } from "../../hooks/useShooting";
+import ShootingController from "../Bullet/ShootingController";
 
 const SPEED = 0.1;
 
 const ModelController = ({
   modelRef,
   onMove,
+  hoverTarget,
 }: {
   modelRef: React.RefObject<THREE.Object3D>;
   onMove: (dir: THREE.Vector3) => void;
+  hoverTarget: React.RefObject<THREE.Vector3>;
 }) => {
   const movement = useMovement();
-  const hoverTarget = useRef(new THREE.Vector3());
   const cursorPos = useRef(new THREE.Vector2(0, 0));
   const raycaster = useRef(new THREE.Raycaster());
-
-  const { bullets, setBullets } = useShooting(modelRef, hoverTarget);
 
   const handleMouseMove = (event: MouseEvent) => {
     cursorPos.current.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -61,12 +61,7 @@ const ModelController = ({
 
   return (
     <>
-      <BulletsRenderer
-        bullets={bullets}
-        removeBullet={(id) =>
-          setBullets((prev) => prev.filter((b) => b.id !== id))
-        }
-      />
+      <ShootingController modelRef={modelRef} hoverTarget={hoverTarget} />
       <mesh position={hoverTarget.current}>
         <sphereGeometry args={[0.1, 16, 16]} />
         <meshBasicMaterial color="red" />
