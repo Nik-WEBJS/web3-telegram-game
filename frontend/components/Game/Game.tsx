@@ -7,34 +7,29 @@ import Model from "../Player/Model";
 import ModelController from "../Player/ModelController";
 import ResizeHandler from "./ResizeHandler";
 import EnemySpawner from "../Enemy/EnemySpawner";
-import ShootingController from "../Bullet/ShootingController";
 import { useEnemies } from "../../hooks/useEnemies";
+import ShootingController from "../Bullet/ShootingController";
 
 const Game = ({ hp, setHp }: any) => {
   const [isClient, setIsClient] = useState(false);
-  const [movement, setMovement] = useState(new THREE.Vector3());
   const modelRef = useRef<THREE.Object3D>(new THREE.Object3D());
   const hoverTarget = useRef<THREE.Vector3>(new THREE.Vector3());
+  const [movement, setMovement] = useState(new THREE.Vector3());
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const handleHitEnemy = (enemyId: number) => {
-    console.log(`Попадание по врагу с ID: ${enemyId}`);
-  };
-
   const { enemies, damageEnemy, collidersRef } = useEnemies(modelRef);
 
+  const handleHitEnemy = (enemyId: number, damage: number) => {
+    damageEnemy(enemyId, damage); // Уменьшаем HP врага
+  };
+
   if (!isClient) return null;
-  modelRef.current.rotation.y = Math.PI;
+
   return (
-    <Canvas
-      style={{
-        width: "100vw",
-        height: "100vh",
-      }}
-    >
+    <Canvas style={{ width: "100vw", height: "100vh" }}>
       <ResizeHandler />
       <CameraController target={modelRef} />
       <ambientLight intensity={0.5} />
@@ -42,8 +37,14 @@ const Game = ({ hp, setHp }: any) => {
       <Model ref={modelRef} position={[0, 0, 0]} />
       <ModelController
         modelRef={modelRef}
-        onMove={(dir) => setMovement(dir.clone())}
         hoverTarget={hoverTarget}
+        onMove={(dir) => setMovement(dir.clone())}
+      />
+      <ShootingController
+        modelRef={modelRef}
+        hoverTarget={hoverTarget}
+        enemies={enemies}
+        onHitEnemy={handleHitEnemy}
       />
       <EnemySpawner
         playerRef={modelRef}
@@ -52,7 +53,10 @@ const Game = ({ hp, setHp }: any) => {
         enemies={enemies}
         collidersRef={collidersRef}
       />
-      <Background movement={movement} playerPos={modelRef.current.position} />
+      <Background
+        movement={new THREE.Vector3()}
+        playerPos={modelRef.current.position}
+      />
     </Canvas>
   );
 };

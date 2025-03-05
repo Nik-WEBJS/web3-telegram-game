@@ -2,9 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { useMovement } from "../../hooks/useMovement";
-import BulletsRenderer from "../Bullet/BulletsRenderer";
-import { useShooting } from "../../hooks/useShooting";
-import ShootingController from "../Bullet/ShootingController";
 
 const SPEED = 0.1;
 
@@ -61,7 +58,6 @@ const ModelController = ({
 
   return (
     <>
-      <ShootingController modelRef={modelRef} hoverTarget={hoverTarget} />
       <mesh position={hoverTarget.current}>
         <sphereGeometry args={[0.1, 16, 16]} />
         <meshBasicMaterial color="red" />

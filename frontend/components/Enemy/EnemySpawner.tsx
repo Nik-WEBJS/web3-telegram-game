@@ -3,10 +3,6 @@ import Enemy from "./Enemy";
 import * as THREE from "three";
 import { Object3D, Vector3 } from "three";
 
-const INITIAL_ENEMIES_COUNT = 10;
-const SPAWN_RADIUS = 20;
-const MIN_DISTANCE_BETWEEN_ENEMIES = 5;
-
 const EnemySpawner = ({
   playerRef,
   enemies,
