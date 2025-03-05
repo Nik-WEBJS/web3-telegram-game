@@ -16,7 +16,7 @@ const Enemy = ({
   setHp: React.Dispatch<React.SetStateAction<number>>;
   collidersRef: React.RefObject<Object3D[]>;
 }) => {
-  const { scene } = useGLTF("/models/enemy/scene.gltf");
+  const { scene } = useGLTF("/assets/enemy/scene.gltf");
   const clonedScene = useMemo(() => scene.clone(), [scene]);
   const enemyRef = useRef<Object3D>(new Object3D());
   const [isInRange, setIsInRange] = useState(false);

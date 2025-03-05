@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import Bullet from "./Bullet";
+import { useMovement } from "../../hooks/useMovement";
+import BulletsRenderer from "../Bullet/BulletsRenderer";
+import { useShooting } from "../../hooks/useShooting";
+
+const SPEED = 0.1;
 
 const ModelController = ({
   modelRef,
@@ -10,81 +14,21 @@ const ModelController = ({
   modelRef: React.RefObject<THREE.Object3D>;
   onMove: (dir: THREE.Vector3) => void;
 }) => {
-  const movement = useRef({
-    forward: false,
-    backward: false,
-    left: false,
-    right: false,
-  });
-
+  const movement = useMovement();
+  const hoverTarget = useRef(new THREE.Vector3());
   const cursorPos = useRef(new THREE.Vector2(0, 0));
   const raycaster = useRef(new THREE.Raycaster());
-  const [bullets, setBullets] = useState<{ id: number; pos: THREE.Vector3; dir: THREE.Vector3 }[]>([]);
-  const bulletId = useRef(0);
-  const hoverTarget = useRef(new THREE.Vector3());
 
-  const SPEED = 0.1;
-
-  const handleKeyDown = (event: KeyboardEvent) => {
-    switch (event.code) {
-      case "KeyW":
-        movement.current.forward = true;
-        break;
-      case "KeyS":
-        movement.current.backward = true;
-        break;
-      case "KeyA":
-        movement.current.left = true;
-        break;
-      case "KeyD":
-        movement.current.right = true;
-        break;
-      case "Space":
-        shootBullet();
-        break;
-    }
-  };
-
-  const handleKeyUp = (event: KeyboardEvent) => {
-    switch (event.code) {
-      case "KeyW":
-        movement.current.forward = false;
-        break;
-      case "KeyS":
-        movement.current.backward = false;
-        break;
-      case "KeyA":
-        movement.current.left = false;
-        break;
-      case "KeyD":
-        movement.current.right = false;
-        break;
-    }
-  };
+  const { bullets, setBullets } = useShooting(modelRef, hoverTarget);
 
   const handleMouseMove = (event: MouseEvent) => {
     cursorPos.current.x = (event.clientX / window.innerWidth) * 2 - 1;
     cursorPos.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
   };
 
-  const shootBullet = () => {
-    if (!modelRef.current) return;
-
-    const bulletStartPos = modelRef.current.position.clone();
-    
-    const bulletDir = hoverTarget.current.clone().sub(bulletStartPos).normalize();
-
-    setBullets((prev) => [...prev, { id: bulletId.current++, pos: bulletStartPos, dir: bulletDir }]);
-  };
-
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
     window.addEventListener("mousemove", handleMouseMove);
-
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
@@ -117,14 +61,12 @@ const ModelController = ({
 
   return (
     <>
-      {bullets.map((bullet) => (
-        <Bullet
-          key={bullet.id}
-          position={bullet.pos}
-          direction={bullet.dir}
-          onRemove={() => setBullets((prev) => prev.filter((b) => b.id !== bullet.id))}
-        />
-      ))}
+      <BulletsRenderer
+        bullets={bullets}
+        removeBullet={(id) =>
+          setBullets((prev) => prev.filter((b) => b.id !== id))
+        }
+      />
       <mesh position={hoverTarget.current}>
         <sphereGeometry args={[0.1, 16, 16]} />
         <meshBasicMaterial color="red" />

@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import Background from "./Background";
@@ -6,7 +6,6 @@ import CameraController from "../Player/CameraController";
 import Model from "../Player/Model";
 import ModelController from "../Player/ModelController";
 import ResizeHandler from "./ResizeHandler";
-import HPBarUI from "../../utils/HPBarUI";
 import EnemySpawner from "../Enemy/EnemySpawner";
 
 const Game = ({ hp, setHp }: any) => {
@@ -36,7 +35,7 @@ const Game = ({ hp, setHp }: any) => {
         modelRef={modelRef}
         onMove={(dir) => setMovement(dir.clone())}
       />
-      <EnemySpawner playerRef={modelRef} setHp={setHp}/>
+      <EnemySpawner playerRef={modelRef} setHp={setHp} />
       <Background movement={movement} playerPos={modelRef.current.position} />
     </Canvas>
   );

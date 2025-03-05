@@ -5,11 +5,11 @@ export const Web3Context = createContext<ethers.BrowserProvider | null>(null);
 
 import { ReactNode } from "react";
 
-interface EthereumWindow extends Window {
+interface EthereumWindow {
   ethereum?: any;
 }
 
-declare const window: EthereumWindow;
+declare const window: EthereumWindow & Window;
 
 const Web3Provider = ({ children }: { children: ReactNode }) => {
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);

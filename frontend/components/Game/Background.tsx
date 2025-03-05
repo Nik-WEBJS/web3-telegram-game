@@ -13,7 +13,7 @@ const Background = ({
   movement: Vector3;
   playerPos: Vector3;
 }) => {
-  const texture = useLoader(TextureLoader, "/models/floor/floor.jpg");
+  const texture = useLoader(TextureLoader, "/assets/floor/floor.jpg");
   const tilesRef = useRef<THREE.Mesh[]>([]);
 
   useEffect(() => {
